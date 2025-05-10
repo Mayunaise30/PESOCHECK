@@ -2,4 +2,5 @@
 torch
 torchvision
 pillow
-gunicorn
+fastapi
+uvicorn
