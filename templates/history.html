@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PesoCheck - History</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      background-color: #0b132b;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+    }
+    nav {
+      background: #1c2541;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+      margin: 0;
+    }
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+    }
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+    .card {
+      background: #1c2541;
+      border-radius: 10px;
+      padding: 2rem;
+    }
+    .entry {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    .entry img {
+      width: 150px;
+      height: auto;
+      border-radius: 8px;
+      margin-right: 2rem;
+    }
+    .entry-info {
+      display: flex;
+      flex-direction: row;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+    .entry-info p {
+      margin: 0;
+    }
+    .result-real {
+      color: #4caf50;
+    }
+    .result-fake {
+      color: #f44336;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <h1>PesoCheck</h1>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/history">History</a></li>
+      <li><a href="/about">About</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <div class="card">
+      <h2>History</h2>
+      {% if history %}
+        {% for entry in history %}
+          <div class="entry">
+            <img src="{{ url_for('uploaded_file', filename=entry.filename) }}" alt="Bill Image">
+            <div class="entry-info">
+              <p><strong>{{ entry.label }}</strong></p>
+              <p>Confidence: {{ entry.confidence }}%</p>
+              <p>{{ entry.timestamp }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p>No history available.</p>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>
+
+

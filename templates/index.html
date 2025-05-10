@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PesoCheck</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      background-color: #0b132b;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+    }
+    nav {
+      background: #1c2541;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+    }
+    .main-container {
+      display: flex;
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+    .card {
+      flex: 1;
+      background-color: #1c2541;
+      padding: 2rem;
+      border-radius: 10px;
+    }
+    .upload-btn {
+      background: #eeeeee;
+      color: black;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .preview, .processed {
+      margin-top: 1rem;
+      width: 100%;
+      max-width: 350px;
+      display: block;
+      border-radius: 10px;
+    }
+    .analyze {
+      margin-top: 1rem;
+      background-color: #00f2a6;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .result-status {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+    .result-real { color: #4caf50; }
+    .result-fake { color: #f44336; }
+  </style>
+</head>
+<body>
+  <nav>
+    <h1>PesoCheck</h1>
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/history">History</a></li>
+      <li><a href="/about">About</a></li>
+    </ul>
+  </nav>
+
+  <div class="main-container">
+    <form class="card" method="POST" enctype="multipart/form-data">
+      <label for="fileInput" class="upload-btn">Upload Image</label>
+      <input type="file" id="fileInput" name="file" required hidden />
+      <img id="uploadedImage" class="preview" style="display: none;" />
+      <button type="submit" class="analyze">Analyze</button>
+    </form>
+
+    <div class="card">
+      <h2>Result</h2>
+      <p id="status" class="result-status {{ 'result-real' if label == 'Real Money' else 'result-fake' }}">
+        {{ label if label else 'Upload an image and click Analyze' }}
+      </p>
+      {% if confidence %}
+        <p>Confidence: {{ confidence|round(2) }}%</p>
+      {% endif %}
+      {% if filename %}
+        <img src="{{ url_for('uploaded_file', filename=filename) }}" class="processed" />
+      {% endif %}
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('fileInput').addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+          const img = document.getElementById('uploadedImage');
+          img.src = event.target.result;
+          img.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
+</body>
+</html>
